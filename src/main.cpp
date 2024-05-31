@@ -35,7 +35,7 @@ bool solve(const F& f, VarEnv<standard_allocator>& env, IDiagnostics& diagnostic
     }
 
     T abs = std::move(opt.value());
-    
+
     GaussSeidelIteration{}.fixpoint(abs);
     abs.deinterpret(env).print(false);
     std::cout<<std::endl;
@@ -46,6 +46,17 @@ bool solve(const F& f, VarEnv<standard_allocator>& env, IDiagnostics& diagnostic
         auto itv = abs.project(var.avars[0]).value();
         std::cout<<"s " <<name.data()<<": "<<battery::get<1>(itv)<<" "<< battery::get<0>(itv)<<std::endl;
     }
+
+    std::cout<<"v <instantiation id='sol1' type='solution'> <list> s[] </list> <values>";
+    
+    for(int i=0;i<vars.size();i++){
+        auto name = vars[i];
+        auto var = env.variable_of(name).value();
+        auto itv = abs.project(var.avars[0]).value();
+        std::cout<<" "<<battery::get<1>(itv);
+    }
+
+    std::cout<<"</values> </instantiation>"<<std::endl;
 
 
     return true;
