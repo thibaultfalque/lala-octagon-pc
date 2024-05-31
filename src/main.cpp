@@ -37,7 +37,7 @@ bool solve(const F& f, VarEnv<standard_allocator>& env, IDiagnostics& diagnostic
     T abs = std::move(opt.value());
 
     GaussSeidelIteration{}.fixpoint(abs);
-    abs.deinterpret(env).print(false);
+    //abs.deinterpret(env).print(false);
     std::cout<<std::endl;
     auto vars = output.getOutputVars();
     for(int i=0;i<vars.size();i++){
