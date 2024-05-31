@@ -27,25 +27,25 @@ using Oct = Octagon<Itv, standard_allocator>;
 
 template<typename T>
 bool solve(const F& f, VarEnv<standard_allocator>& env, IDiagnostics& diagnostics,FlatZincOutput<battery::standard_allocator> & output) {
-    T abs = create_and_interpret_and_tell<T,true>(f, env, diagnostics).value();
-    if(diagnostics.is_fatal()) {
+    auto opt = create_and_interpret_and_tell<T,true>(f, env, diagnostics);
+    if(!opt.has_value() || diagnostics.is_fatal()){
+        std::cerr<<"Interpretation failed"<<std::endl;
         diagnostics.print();
         return false;
     }
+
+    T abs = std::move(opt.value());
     
-    //abs.deinterpret(env).print(false);
     GaussSeidelIteration{}.fixpoint(abs);
     abs.deinterpret(env).print(false);
     std::cout<<std::endl;
     auto vars = output.getOutputVars();
     for(int i=0;i<vars.size();i++){
-        auto name = output.vars[i];
+        auto name = vars[i];
         auto var = env.variable_of(name).value();
         auto itv = abs.project(var.avars[0]).value();
-        std::cout<<name.data()<<": "<<battery::get<1>(itv)<<" "<< battery::get<0>(itv)<<std::endl;
+        std::cout<<"s " <<name.data()<<": "<<battery::get<1>(itv)<<" "<< battery::get<0>(itv)<<std::endl;
     }
-
-
 
 
     return true;
