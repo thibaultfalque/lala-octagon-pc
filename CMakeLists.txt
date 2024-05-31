@@ -41,7 +41,7 @@ else()
   FetchContent_Declare(
     lala_octagon
     GIT_REPOSITORY "https://github.com/thibaultfalque/lala-octagon"
-    GIT_TAG        686d106659458bde1983d4b3936dee2f4c77b84a
+    GIT_TAG        3edb58dcd95501fd15fe19179f3e622327ba27ae
   )
 
   FetchContent_Declare(
